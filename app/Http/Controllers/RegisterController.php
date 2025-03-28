@@ -43,7 +43,7 @@ class RegisterController extends Controller
     {
         $user = User::find(Auth::id());
         if ($user->isAdmin()) {
-            return route("organizer-dashboard");
+            return route("organizer.dashboard");
         }
         return route("index");
     }
