@@ -16,7 +16,7 @@
     @yield('styles')
 </head>
 
-<body class="bg-gradient-primary">
+<body class="@yield('body-class')">
     @yield('content')
 
     <script src="{{ asset('libs/js/jquery.min.js') }}"></script>

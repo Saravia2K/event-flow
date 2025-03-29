@@ -1,5 +1,7 @@
 @extends('templates.base')
 
+@section('body-class', 'bg-gradient-primary');
+
 @section('styles')
     <style>
         .bg-login-image img {
