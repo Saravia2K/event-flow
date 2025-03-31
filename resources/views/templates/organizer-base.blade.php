@@ -2,6 +2,10 @@
 
 @section('body-class', 'page-top')
 
+@section('styles')
+    <link rel="stylesheet" href="{{ asset('css/forms.css') }}">
+@endsection
+
 @section('content')
     <div id="wrapper">
         <!-- Sidebar -->
@@ -30,7 +34,7 @@
 
             <!-- Nav Item - Charts -->
             <li class="nav-item">
-                <a class="nav-link" href="charts.html">
+                <a class="nav-link" href="{{ route('organizer.events') }}">
                     <i class="fa-solid fa-file-pdf"></i>
                     <span>Eventos</span></a>
             </li>

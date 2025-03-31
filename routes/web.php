@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\EventsController;
 use App\Http\Controllers\OrganizerController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\LoginController;
@@ -37,6 +38,16 @@ Route::middleware([Authenticated::class])->group(function () {
     Route::prefix("organizador")->group(function () {
         Route::get("/", [OrganizerController::class, "showDashboard"])
             ->name("organizer.dashboard");
+
+        Route::prefix("eventos")->group(function () {
+            Route::post("/", [EventsController::class, "create"])
+                ->name("organizer.events.create");
+
+            Route::get("/", [EventsController::class, "showOrganizerEventsPage"])
+                ->name("organizer.events");
+            Route::get("/agregar", [EventsController::class, "showOrganizerCreateEventPage"])
+                ->name("organizer.events.create-form");
+        });
     });
 
     /**
