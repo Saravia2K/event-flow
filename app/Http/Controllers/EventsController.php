@@ -4,12 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Event;
+use App\Models\EventPdf;
 use App\Models\Notification;
 use App\Models\Participant;
+use Barryvdh\DomPDF\PDF;
+use Dompdf\Dompdf;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
+use Storage;
 
 class EventsController extends Controller
 {
@@ -70,6 +75,39 @@ class EventsController extends Controller
         } catch (ModelNotFoundException $e) {
             return to_route("organizer.events");
         }
+    }
+
+    function showOrganizerDetails(Event $event)
+    {
+        $event->load(['participants.user', 'comments.user']);
+
+        return view('organizer.events.details', compact('event'));
+    }
+
+    public function generatePdf(Event $event)
+    {
+        $event->load(['participants.user']);
+
+        $pdfGenerator = App::make("dompdf.wrapper");
+        // Generar el PDF
+        $pdf = $pdfGenerator->loadView('organizer.events.pdf', [
+            'event' => $event,
+            'date' => now()->format('d/m/Y')
+        ]);
+
+        // Guardar en storage
+        $filename = 'event_report_' . $event->id . '_' . now()->format('Ymd_His') . '.pdf';
+        $path = 'reports/events/' . $filename;
+        Storage::put($path, $pdf->output());
+
+        // Opcional: Guardar registro en DB
+        EventPdf::create([
+            'event_id' => $event->id,
+            'file_path' => $path,
+            'generated_by' => Auth::id()
+        ]);
+
+        return $pdf->download($filename);
     }
 
     function create(Request $request)

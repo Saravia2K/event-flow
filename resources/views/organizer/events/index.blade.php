@@ -114,12 +114,16 @@
                                     <td class="text-end pe-4">
                                         <div class="action-icons">
                                             <a href="{{ route('organizer.events.edit-form', ['id' => $event->id]) }}"
-                                                class="text-primary edit me-3">
+                                                class="text-primary edit">
                                                 <i class="fas fa-edit"></i>
                                             </a>
                                             <a href="#" class="text-danger delete"
                                                 onclick="confirmDelete({{ $event->id }})">
                                                 <i class="fas fa-trash-alt"></i>
+                                            </a>
+                                            <a href="{{ route('organizer.events.details', $event) }}"
+                                                class="text-success watch">
+                                                <i class="fa-solid fa-eye"></i>
                                             </a>
                                         </div>
                                     </td>

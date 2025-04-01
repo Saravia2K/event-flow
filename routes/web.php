@@ -53,6 +53,12 @@ Route::middleware([Authenticated::class])->group(function () {
             Route::get("/", [EventsController::class, "showOrganizerEventsPage"])
                 ->name("organizer.events");
 
+            Route::get("/{event}/detalles", [EventsController::class, "showOrganizerDetails"])
+                ->name("organizer.events.details");
+
+            Route::get("/{event}/reporte", [EventsController::class, "generatePdf"])
+                ->name("organizer.events.report");
+
             Route::get("/agregar", [EventsController::class, "showOrganizerCreateForm"])
                 ->name("organizer.events.create-form");
 
