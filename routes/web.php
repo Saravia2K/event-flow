@@ -40,16 +40,32 @@ Route::middleware([Authenticated::class])->group(function () {
             ->name("organizer.dashboard");
 
         Route::prefix("eventos")->group(function () {
+            #region Posts
             Route::post("/", [EventsController::class, "create"])
                 ->name("organizer.events.create");
+            #endregion
 
+            #region Gets
             Route::get("/", [EventsController::class, "showOrganizerEventsPage"])
                 ->name("organizer.events");
-            Route::get("/agregar", [EventsController::class, "showOrganizerCreateEventPage"])
+
+            Route::get("/agregar", [EventsController::class, "showOrganizerCreateForm"])
                 ->name("organizer.events.create-form");
 
-            Route::delete('/', [EventsController::class, "delete"])
+            Route::get("/editar/{id}", [EventsController::class, "showOrganizerEditForm"])
+                ->name("organizer.events.edit-form")
+                ->whereNumber("id");
+            #endregion
+
+            #region Patch/Puts
+            Route::patch("/", [EventsController::class, "update"])
+                ->name("organizer.events.update");
+            #endregion
+
+            #region Deletes
+            Route::delete('/delete', [EventsController::class, "delete"])
                 ->name("organizer.events.delete");
+            #endregion
         });
     });
 

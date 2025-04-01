@@ -40,16 +40,20 @@
 
     </div>
     <div class="container-fluid py-4">
-        <!-- Alertas -->
-        <div id="successAlert" class="alert alert-success alert-dismissible fade show d-none" role="alert">
-            <span id="successMessage"></span>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
+        @if (session('alert'))
+            @if (session('alert')['success'])
+                <!-- Alertas -->
+                <div id="successAlert" class="alert alert-success" role="alert">
+                    <span id="successMessage">{{ session('alert')['message'] }}</span>
+                </div>
+            @endif
 
-        <div id="errorAlert" class="alert alert-danger alert-dismissible fade show d-none" role="alert">
-            <span id="errorMessage"></span>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
+            @if (!session('alert')['success'])
+                <div id="errorAlert" class="alert alert-danger" role="alert">
+                    <span id="errorMessage">{{ session('alert')['message'] }}</span>
+                </div>
+            @endif
+        @endif
 
         <!-- Tarjeta contenedora -->
         <div class="card shadow-sm">
@@ -105,11 +109,12 @@
                                     </td>
                                     <td>{{ $event->start_date->format('d/m/Y, h:i A') }}</td>
                                     <td>{{ $event->end_date->format('d/m/Y, h:i A') }}</td>
-                                    <td><span class="badge {{ $statusClass }} status-badge">{{ $statusText }}</span></td>
+                                    <td><span class="badge {{ $statusClass }} status-badge">{{ $statusText }}</span>
+                                    </td>
                                     <td class="text-end pe-4">
                                         <div class="action-icons">
-                                            <a href="#" class="text-primary edit me-3"
-                                                onclick="editEvent({{ $event->id }})">
+                                            <a href="{{ route('organizer.events.edit-form', ['id' => $event->id]) }}"
+                                                class="text-primary edit me-3">
                                                 <i class="fas fa-edit"></i>
                                             </a>
                                             <a href="#" class="text-danger delete"
