@@ -5,6 +5,7 @@ use App\Http\Controllers\EventsController;
 use App\Http\Controllers\OrganizerController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ParticipantController;
 use App\Http\Middleware\Authenticated;
 use App\Http\Middleware\RedirectIfAuthenticated;
@@ -70,6 +71,14 @@ Route::middleware([Authenticated::class])->group(function () {
                 ->name("organizer.events.delete");
             #endregion
         });
+
+        Route::prefix("solicitudes")->group(function () {
+            Route::get("/", [ParticipantController::class, "requests"])
+                ->name("organizer.requests");
+
+            Route::post('/participants/{participation}/update-status', [ParticipantController::class, 'updateStatus'])
+                ->name('organizer.requests.participants.update-status');
+        });
     });
 
     /**
@@ -98,5 +107,13 @@ Route::middleware([Authenticated::class])->group(function () {
     Route::prefix('comentario')->group(function () {
         Route::delete("/{comment}", [EventCommentController::class, "destroy"])
             ->name("comment.destroy");
+    });
+
+    /**
+     * Notifications routes
+     */
+    Route::prefix("notificaciones")->group(function () {
+        Route::get('/{notification}/read-and-redirect', [NotificationController::class, "readAndRedirect"])
+            ->name("notifications.read");
     });
 });

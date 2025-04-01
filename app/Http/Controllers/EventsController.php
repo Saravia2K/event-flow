@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Event;
+use App\Models\Notification;
 use App\Models\Participant;
+use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -63,7 +65,7 @@ class EventsController extends Controller
     function showOrganizerEditForm(string $id)
     {
         try {
-            $event = $event = Event::findOrFail($id);
+            $event = Event::findOrFail($id);
             return view("organizer.events.form", compact("event"));
         } catch (ModelNotFoundException $e) {
             return to_route("organizer.events");
@@ -90,10 +92,30 @@ class EventsController extends Controller
         unset($validated["id"]);
         $updated = Event::where("id", $id)->update($validated);
 
+        $this->notifyParticipantsAboutUpdate(Event::find($id)->first());
+
         return to_route("organizer.events")->with("alert", [
             'success' => $updated,
             'message' => 'Evento actualizado con éxito'
         ]);
+    }
+
+    protected function notifyParticipantsAboutUpdate(Event $event)
+    {
+        $participants = $event->participants()
+            ->where('participation_status', 'confirmed')
+            ->with('user')
+            ->get();
+
+        foreach ($participants as $participant) {
+            Notification::create([
+                'user_id' => $participant->user_id,
+                'event_id' => $event->id,
+                'title' => 'Evento actualizado: ' . $event->title,
+                'message' => 'El evento al que estás registrado ha sido modificado. Revisa los nuevos detalles.',
+                'is_read' => false
+            ]);
+        }
     }
 
     function delete(Request $request)
