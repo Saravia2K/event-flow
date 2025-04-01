@@ -47,6 +47,9 @@ Route::middleware([Authenticated::class])->group(function () {
                 ->name("organizer.events");
             Route::get("/agregar", [EventsController::class, "showOrganizerCreateEventPage"])
                 ->name("organizer.events.create-form");
+
+            Route::delete('/', [EventsController::class, "delete"])
+                ->name("organizer.events.delete");
         });
     });
 

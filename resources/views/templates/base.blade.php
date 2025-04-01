@@ -13,6 +13,7 @@
     <script src="https://kit.fontawesome.com/fe3ed46693.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="{{ asset('libs/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('libs/css/sb-admin-2.min.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     @yield('styles')
 </head>
 
