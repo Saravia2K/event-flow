@@ -50,13 +50,13 @@
             <div class="form-group">
                 <label for="status">Estado del Evento*</label>
                 <select id="status" name="status" required>
-                    <option value="">Seleccione un estado</option>
+                    <option disabled selected>----- Seleccione un estado -----</option>
                     <option value="active">Activo</option>
                     <option value="inactive">Inactivo</option>
                     <option value="finished">Finalizado</option>
                 </select>
-                @error('end_date')
-                    <div class="status">{{ $message }}</div>
+                @error('status')
+                    <div class="error-message">{{ $message }}</div>
                 @enderror
             </div>
 
