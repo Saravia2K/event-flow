@@ -19,6 +19,16 @@ class EventsController extends Controller
         'status' => ['string', 'required', "in:active,inactive,finished"]
     ];
 
+    function catalog()
+    {
+        $events = Event::where('status', 'active')
+            ->where('start_date', '>=', now()) // Opcional: solo futuros
+            ->orderBy('start_date')
+            ->get();
+
+        return view('participants.index', compact('events'));
+    }
+
     function showOrganizerEventsPage()
     {
         $events = Event::where([

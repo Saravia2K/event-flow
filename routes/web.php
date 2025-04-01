@@ -72,7 +72,5 @@ Route::middleware([Authenticated::class])->group(function () {
     /**
      * Participants routes
      */
-    Route::get("/", function () {
-        return "index";
-    })->name("index");
+    Route::get("/", [EventsController::class, "catalog"])->name("index");
 });
