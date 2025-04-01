@@ -7,6 +7,7 @@ use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ParticipantController;
+use App\Http\Controllers\ReportController;
 use App\Http\Middleware\Authenticated;
 use App\Http\Middleware\RedirectIfAuthenticated;
 use App\Models\EventComment;
@@ -85,6 +86,11 @@ Route::middleware([Authenticated::class])->group(function () {
             Route::post('/participants/{participation}/update-status', [ParticipantController::class, 'updateStatus'])
                 ->name('organizer.requests.participants.update-status');
         });
+
+        Route::prefix("reportes")->group(function () {
+            Route::get("/", [ReportController::class, "index"])
+                ->name("organizer.reports");
+        });
     });
 
     /**
@@ -96,6 +102,9 @@ Route::middleware([Authenticated::class])->group(function () {
     Route::get("/perfil", [ParticipantController::class, "show"])
         ->name("participant.profile");
 
+    /**
+     * Events routes
+     */
     Route::prefix("evento")->group(function () {
         Route::get("/{event}", [EventsController::class, "show"])
             ->name("participant.event");

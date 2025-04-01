@@ -35,15 +35,21 @@
             <!-- Nav Item - Charts -->
             <li class="nav-item">
                 <a class="nav-link" href="{{ route('organizer.events') }}">
-                    <i class="fa-solid fa-file-pdf"></i>
+                    <i class="fa-solid fa-calendar"></i>
                     <span>Eventos</span></a>
             </li>
 
             <!-- Nav Item - Tables -->
             <li class="nav-item">
                 <a class="nav-link" href="{{ route('organizer.requests') }}">
-                    <i class="fas fa-fw fa-table"></i>
+                    <i class="fa-regular fa-bell"></i>
                     <span>Solicitudes</span></a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('organizer.reports') }}">
+                    <i class="fa-solid fa-file-pdf"></i>
+                    <span>Reportes</span></a>
             </li>
 
             <!-- Divider -->

@@ -4,12 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Event;
-use App\Models\EventPdf;
 use App\Models\Notification;
 use App\Models\Participant;
-use Barryvdh\DomPDF\PDF;
-use Dompdf\Dompdf;
-use Illuminate\Contracts\Database\Eloquent\Builder;
+use App\Models\Report;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
@@ -97,14 +94,14 @@ class EventsController extends Controller
 
         // Guardar en storage
         $filename = 'event_report_' . $event->id . '_' . now()->format('Ymd_His') . '.pdf';
-        $path = 'reports/events/' . $filename;
-        Storage::put($path, $pdf->output());
+        $path = 'reports/' . $filename;
+        Storage::disk("public")->put($path, $pdf->output());
 
         // Opcional: Guardar registro en DB
-        EventPdf::create([
-            'event_id' => $event->id,
+        Report::create([
+            'generated_by' => Auth::id(),
             'file_path' => $path,
-            'generated_by' => Auth::id()
+            'event_id' => $event->id
         ]);
 
         return $pdf->download($filename);
