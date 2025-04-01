@@ -5,6 +5,7 @@ use App\Http\Controllers\EventsController;
 use App\Http\Controllers\OrganizerController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\ParticipantController;
 use App\Http\Middleware\Authenticated;
 use App\Http\Middleware\RedirectIfAuthenticated;
 use App\Models\EventComment;
@@ -77,6 +78,9 @@ Route::middleware([Authenticated::class])->group(function () {
     Route::get("/", [EventsController::class, "catalog"])
         ->name("index");
 
+    Route::get("/perfil", [ParticipantController::class, "show"])
+        ->name("participant.profile");
+
     Route::prefix("evento")->group(function () {
         Route::get("/{event}", [EventsController::class, "show"])
             ->name("participant.event");
@@ -88,6 +92,9 @@ Route::middleware([Authenticated::class])->group(function () {
             ->name("participant.event.comment");
     });
 
+    /**
+     * Comments routes
+     */
     Route::prefix('comentario')->group(function () {
         Route::delete("/{comment}", [EventCommentController::class, "destroy"])
             ->name("comment.destroy");

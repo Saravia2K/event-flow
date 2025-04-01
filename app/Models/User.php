@@ -52,4 +52,9 @@ class User extends Authenticatable
     {
         return $this->role === 'admin';
     }
+
+    public function participations()
+    {
+        return $this->hasMany(Participant::class);
+    }
 }
