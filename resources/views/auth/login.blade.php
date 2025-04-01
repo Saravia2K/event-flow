@@ -2,6 +2,8 @@
 
 @section('body-class', 'bg-gradient-primary')
 
+@section('page_title', 'Login')
+
 @section('styles')
     <style>
         .bg-login-image img {
@@ -55,7 +57,7 @@
                                             <div class="custom-control custom-checkbox small">
                                                 <input type="checkbox" class="custom-control-input" id="remember"
                                                     name="remember">
-                                                <label class="custom-control-label" for="customCheck">Recuerdame</label>
+                                                <label class="custom-control-label" for="remember">Recuerdame</label>
                                             </div>
                                         </div>
                                         <button type="submit" class="btn btn-primary btn-user btn-block">
