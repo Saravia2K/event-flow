@@ -1,11 +1,13 @@
 <?php
 
+use App\Http\Controllers\EventCommentController;
 use App\Http\Controllers\EventsController;
 use App\Http\Controllers\OrganizerController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\LoginController;
 use App\Http\Middleware\Authenticated;
 use App\Http\Middleware\RedirectIfAuthenticated;
+use App\Models\EventComment;
 use Illuminate\Support\Facades\Route;
 
 Route::get("/logout", [LoginController::class, "logout"])->name("logout");
@@ -72,5 +74,22 @@ Route::middleware([Authenticated::class])->group(function () {
     /**
      * Participants routes
      */
-    Route::get("/", [EventsController::class, "catalog"])->name("index");
+    Route::get("/", [EventsController::class, "catalog"])
+        ->name("index");
+
+    Route::prefix("evento")->group(function () {
+        Route::get("/{event}", [EventsController::class, "show"])
+            ->name("participant.event");
+
+        Route::post("/{event}/participar", [EventsController::class, "participate"])
+            ->name("participant.event.participate");
+
+        Route::post("/{event}/comentar", [EventCommentController::class, "store"])
+            ->name("participant.event.comment");
+    });
+
+    Route::prefix('comentario')->group(function () {
+        Route::delete("/{comment}", [EventCommentController::class, "destroy"])
+            ->name("comment.destroy");
+    });
 });

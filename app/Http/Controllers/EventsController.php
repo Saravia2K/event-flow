@@ -4,10 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Event;
+use App\Models\Participant;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Validation\Rule;
 
 class EventsController extends Controller
 {
@@ -27,6 +27,22 @@ class EventsController extends Controller
             ->get();
 
         return view('participants.index', compact('events'));
+    }
+
+    public function show(Event $event)
+    {
+        $event->load([
+            'comments.user',
+            'participants.user',
+        ]);
+
+        $userParticipation = $event->participants
+            ->where('user_id', Auth::id())
+            ->first();
+
+        $canComment = $userParticipation && $userParticipation->participation_status === 'confirmed';
+
+        return view('participants.event', compact('event', 'userParticipation', 'canComment'));
     }
 
     function showOrganizerEventsPage()
@@ -93,6 +109,26 @@ class EventsController extends Controller
             'success' => $deleted,
             'message' => 'Evento eliminado con éxito'
         ]);
-        ;
+    }
+
+    public function participate(Request $request, Event $event)
+    {
+        // Verificar si ya participa
+        $existing = Participant::where('event_id', $event->id)
+            ->where('user_id', Auth::id())
+            ->exists();
+
+        if ($existing) {
+            return back()->with('error', 'Ya has solicitado participar');
+        }
+
+        // Crear nueva participación
+        Participant::create([
+            'event_id' => $event->id,
+            'user_id' => Auth::id(),
+            'participation_status' => 'pending' // O 'confirmed' según tu lógica
+        ]);
+
+        return back()->with('success', 'Solicitud enviada correctamente');
     }
 }

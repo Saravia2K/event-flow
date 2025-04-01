@@ -27,4 +27,19 @@ class Event extends Model
             'end_date' => 'datetime',
         ];
     }
+
+    public function comments()
+    {
+        return $this->hasMany(EventComment::class)->oldest();
+    }
+
+    public function participants()
+    {
+        return $this->hasMany(Participant::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }
