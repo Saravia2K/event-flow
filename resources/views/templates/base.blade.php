@@ -25,6 +25,7 @@
     <script src="{{ asset('libs/js/bootstrap.5.bundle.min.js') }}"></script>
     <script src="{{ asset('libs/js/jquery.easing.min.js') }}"></script>
     <script src="{{ asset('libs/js/sb-admin-2.min.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     @yield('scripts')
 </body>
 
