@@ -12,6 +12,7 @@ class ReportController extends Controller
     {
         $reports = Report::with(["user", "event"])
             ->where("generated_by", Auth::id())
+            ->orderByDesc("id")
             ->get();
 
         return view('reports.index', compact('reports'));

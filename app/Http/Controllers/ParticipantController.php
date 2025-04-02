@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\Notification;
 use App\Models\Participant;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -16,11 +18,7 @@ class ParticipantController extends Controller
 
         // Obtener eventos del usuario categorizados
         $participations = $user->participations()
-            ->with([
-                'event' => function ($query) {
-                    $query->withCount('participants', 'comments');
-                }
-            ])
+            ->with(['event'])
             ->get()
             ->groupBy('participation_status');
 
@@ -36,10 +34,12 @@ class ParticipantController extends Controller
     {
         $pendingParticipants = Participant::with(['user', 'event'])
             ->where('participation_status', 'pending')
+            ->whereRelation("event", "created_by", Auth::id())
             ->orderBy('created_at', 'desc')
             ->get();
 
         $processedParticipants = Participant::with(['user', 'event'])
+            ->whereRelation("event", "created_by", Auth::id())
             ->whereIn('participation_status', ['confirmed', 'rejected'])
             ->orderBy('updated_at', 'desc')
             ->get();
