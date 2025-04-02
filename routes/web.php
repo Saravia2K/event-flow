@@ -114,6 +114,9 @@ Route::middleware([Authenticated::class])->group(function () {
 
         Route::post("/{event}/comentar", [EventCommentController::class, "store"])
             ->name("participant.event.comment");
+
+        Route::post("/{event}/cancelar-participacion", [ParticipantController::class, "cancelParticipation"])
+            ->name("participant.event.cancel");
     });
 
     /**

@@ -222,6 +222,21 @@
                     </div>
                 </div>
 
+                @if ($userParticipation)
+                    @if ($userParticipation->participation_status == 'confirmed' || $userParticipation->participation_status == 'pending')
+                        <form action="{{ route('participant.event.cancel', $event) }}" method="POST"
+                            class="mb-4 d-flex justify-content-end">
+                            @csrf
+                            <button type="submit" class="btn btn-warning btn-icon-split">
+                                <span class="icon text-white-50">
+                                    <i class="fa-solid fa-xmark"></i>
+                                </span>
+                                <span class="text">Cancelar participación</span>
+                            </button>
+                        </form>
+                    @endif
+                @endif
+
                 <!-- Detalles rápidos -->
                 <div class="card shadow-sm">
                     <div class="card-header">

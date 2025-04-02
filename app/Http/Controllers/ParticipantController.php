@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Event;
 use App\Models\Notification;
 use App\Models\Participant;
 use Illuminate\Database\Eloquent\Builder;
@@ -83,5 +84,15 @@ class ParticipantController extends Controller
             'message' => $statusMessages[$status],
             'is_read' => 0
         ]);
+    }
+
+    public function cancelParticipation(Event $event)
+    {
+        $participation = Participant::where("event_id", $event->id)
+            ->where("user_id", Auth::id());
+
+        $participation->delete();
+
+        return back();
     }
 }
